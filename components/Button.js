@@ -6,13 +6,13 @@ export default function Button({ icon, text, background = "black", color = "whit
         return <Link href={!disabled ? link : "#"}>
             <div className={`${styles.container} ${disabled && styles.disabled} ${className}`} style={{ backgroundColor: background, border: border || "none" }} onClick={!disabled ? onClick : undefined} >
                 {icon && <div className={styles.icon} style={{ color: color }}>{icon}</div>}
-                {text && <div className={styles.text} style={{ color: color }}>{text}</div>}
+                {text && <p className={styles.text} style={{ color: color }}>{text}</p>}
             </div>
         </Link>
     }
 
     return <div className={`${styles.container} ${disabled && styles.disabled} ${className}`} style={{ backgroundColor: background, border: border || "none" }} onClick={!disabled ? onClick : undefined} >
         {icon && <div className={styles.icon} style={{ color: color }}>{icon}</div>}
-        {text &&<div className={styles.text} style={{ color: color }}>{text}</div>}
+        {text && <p className={styles.text} style={{ color: color }}>{text}</p>}
     </div>
 }
