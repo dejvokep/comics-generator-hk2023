@@ -1,0 +1,37 @@
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: inline-flex;
+
+    height: 120px;
+    width: 100%;
+    padding: 30px;
+}
+
+.favicon {
+    margin-right: 30px;
+}
+
+.faviconSizing {
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+}
+
+.links {
+    display: inline-flex;
+}
+
+.link {
+    margin: 0 40px;
+
+    line-height: 60px;
+    font-size: 30px;
+    color: white;
+}
+
+.link p {
+    margin: 0;
+}
