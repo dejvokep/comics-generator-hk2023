@@ -1,0 +1,25 @@
+.container {
+    cursor: pointer;
+    height: 40px;
+    display: inline-flex;
+    padding: 10px 15px;
+    border-radius: 7px;
+    transition: .5s;
+}
+
+.container:hover {
+    filter: brightness(90%);
+}
+
+.disabled, .disabled:hover {
+    filter: brightness(70%);
+}
+
+.icon {
+    height: 20px;
+    width: 20px;
+}
+
+.text {
+    margin-left: 10px;
+}
