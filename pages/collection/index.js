@@ -14,7 +14,7 @@ export default function Collection({comics, characters}) {
         <div className={styles.carousel}>
             <h1>My comics</h1>
             <div className={styles.displayBox}>
-                {comics.map(comic => <ComicDisplay key={comic.id} comic={comic} onDel={refresh}/>)}
+                {comics.map(comic => <ComicDisplay key={comic.id} comic={comic} onDel={refresh} char={false}/>)}
                 <div className={styles.addNew}>
                     <Link href={"/comic"}><PlusIcon/></Link>
                 </div>
@@ -23,7 +23,7 @@ export default function Collection({comics, characters}) {
         <div className={styles.carousel}>
             <h1>My characters</h1>
             <div className={styles.displayBox}>
-                {characters.map(character => <ComicDisplay key={character.id} comic={character} onDel={refresh}/>)}
+                {characters.map(character => <ComicDisplay key={character.id} comic={character} onDel={refresh} char={true}/>)}
                 <div className={styles.addNew}>
                     <Link href={"/character"}><PlusIcon/></Link>
                 </div>

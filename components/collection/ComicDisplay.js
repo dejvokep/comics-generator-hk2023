@@ -2,14 +2,13 @@ import styles from "../../styles/components/collection/ComicDisplay.module.css"
 import Button from "../Button";
 import {PencilIcon, StopCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 
-export default function ComicDisplay({comic, onDel}) {
+export default function ComicDisplay({comic, onDel, char}) {
     function del() {
-        const comic = comic.image === undefined;
         fetch("/api/del", {
             method: "POST",
             body: {
                 id: comic.id,
-                comic
+                comic: !char
             }
         }).then(data => data.json());
         onDel();
@@ -29,7 +28,7 @@ export default function ComicDisplay({comic, onDel}) {
                 }}>{comic.name}</p>
                 <div className={styles.buttons}>
                     <div className={styles.buttonSpace}><Button text={"Edit"} icon={<PencilIcon/>}
-                                                                background={"#E20074"} color={"white"} link={comic.panels ? "/editor?id=" + comic.id : ""}/></div>
+                                                                background={"#E20074"} color={"white"} link={!char ? ("/editor?id=" + comic.id) : "/character"}/></div>
                     <div><Button text={"Delete"} icon={<TrashIcon/>} background={"#E20074"} color={"white"} onClick={del}/></div>
                 </div>
             </div>

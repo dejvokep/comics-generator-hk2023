@@ -6,7 +6,7 @@ import Menu from "../components/Menu";
 function MyApp({ Component, pageProps }) {
   return <Fragment>
     <Head>
-      <title>NAME</title>
+      <title>Telecomic</title>
       <meta name="description" content="DESC" />
       <link rel="icon" href="/favicon.png" />
     </Head>
