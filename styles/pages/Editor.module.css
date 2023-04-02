@@ -1,0 +1,28 @@
+.container {
+    padding: 150px 2em 0 2em;
+    color: white;
+}
+
+.displayBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+}
+
+.text {
+}
+
+.addNew {
+    cursor: pointer;
+    height: 300px;
+    width: 300px;
+    display: grid;
+    place-items: center;
+    margin: 20px 0;
+}
+
+.addNew svg {
+    color: #E20074;
+    height: 40px;
+}

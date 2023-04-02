@@ -1,0 +1,18 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+.img {
+}
+
+.img img {
+    width: 900px;
+    height: 500px;
+}
+
+.img2 img {
+
+}

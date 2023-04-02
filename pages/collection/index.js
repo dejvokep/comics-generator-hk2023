@@ -6,11 +6,15 @@ import Link from "next/link";
 import {getAllCollection} from "../../database/database";
 
 export default function Collection({comics, characters}) {
+    function refresh() {
+        window.location.reload();
+    }
+
     return <div className={styles.container}>
         <div className={styles.carousel}>
             <h1>My comics</h1>
             <div className={styles.displayBox}>
-                {comics.map(comic => <ComicDisplay key={comic.id} comic={comic}/>)}
+                {comics.map(comic => <ComicDisplay key={comic.id} comic={comic} onDel={refresh}/>)}
                 <div className={styles.addNew}>
                     <Link href={"/comic"}><PlusIcon/></Link>
                 </div>
@@ -19,7 +23,7 @@ export default function Collection({comics, characters}) {
         <div className={styles.carousel}>
             <h1>My characters</h1>
             <div className={styles.displayBox}>
-                {characters.map(character => <ComicDisplay key={character.id} comic={character}/>)}
+                {characters.map(character => <ComicDisplay key={character.id} comic={character} onDel={refresh}/>)}
                 <div className={styles.addNew}>
                     <Link href={"/character"}><PlusIcon/></Link>
                 </div>

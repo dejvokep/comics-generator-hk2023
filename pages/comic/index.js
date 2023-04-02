@@ -3,11 +3,12 @@ import styles2 from "../../styles/pages/Comic.module.css";
 import {useState} from "react";
 import Button from "../../components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
-import {getAllCollection, getCharacters} from "../../database/database";
+import {getCharacters} from "../../database/database";
+import {useRouter} from "next/router";
 
 export default function Comic({ characters }) {
-
     const [data, setData] = useState({
+        submitting: false,
         name: "",
         story: "",
         characters: new Set(),
@@ -26,9 +27,27 @@ export default function Comic({ characters }) {
         const newData = {...data};
         if (newData.characters.has(id))
             newData.characters.delete(id);
-        else
+        else {
+            if (newData.characters.size === 5)
+                return
             newData.characters.add(id);
+        }
         setData(newData);
+    }
+
+    const router = useRouter();
+    function submit() {
+        const newData = {...data};
+        newData.submitting = true;
+        setData(newData);
+
+        fetch("/api/addcomic", {
+            method: "POST",
+            body: JSON.stringify({
+                ...data,
+                characters: Array.from(data.characters)
+            })
+        }).then(res => res.json()).then(data => router.push(`editor?id=${data.id}`))
     }
 
     return <div className={styles.container}>
@@ -73,7 +92,7 @@ export default function Comic({ characters }) {
                 </table>
             </form>
             <div className={styles2.button}>
-                <Button text={"Submit"} icon={<CheckCircleIcon />} background={"#E20074"} color={"white"} />
+                <Button text={data.submitting ? "Submitting..." : "Submit"} icon={<CheckCircleIcon/>} background={"#E20074"} color={"white"} disabled={data.submitting} onClick={submit}/>
             </div>
         </div>
     </div>

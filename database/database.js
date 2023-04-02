@@ -1,3 +1,5 @@
+import {ObjectId} from "mongodb";
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = process.env.MONGODB_URL;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -19,37 +21,55 @@ export async function addGeneratedCharacter(name, prompt, image) {
     await client.close();
     return id;
 }
-export async function addComics(name, story, mood, location, style) {
+export async function addComics(name, story, mood, location, style, characters) {
     await client.connect();
     const id = (await client.db().collection("comics").insertOne({
-        name, story, mood, location, style
+        name, story, mood, location, style, characters, panels: []
     })).insertedId.toHexString();
     await client.close();
     return id;
 }
-export async function setNarrative(id, array) {
+export async function del(id, comic) {
     await client.connect();
-    const uid = (await client.db().collection("comics").updateOne({
-        _id: id
+    await client.db().collection(comic ? "comics" : "characters").deleteOne({
+        _id: new ObjectId(id)
+    })
+    await client.close()
+}
+export async function setNarrative(id, array, story) {
+    await client.connect();
+    (await client.db().collection("comics").updateOne({
+        _id: new ObjectId(id)
     }, {
         $set: {
-            narrative: array
+            narrative: array,
+            story: story,
+            panels: []
         }
-    })).upsertedId.toHexString();
+    }));
     await client.close();
-    return uid;
 }
 export async function setPanel(id, order, base64) {
     await client.connect();
-    const uid = (await client.db().collection("comics").updateOne({
-        _id: id
+    (await client.db().collection("comics").updateOne({
+        _id: new ObjectId(id)
     }, {
         $set: {
             [`panels.${order}`]: base64
         }
-    })).upsertedId.toHexString();
+    }));
     await client.close();
-    return uid;
+}
+export async function addPanel(id, base64) {
+    await client.connect();
+    (await client.db().collection("comics").updateOne({
+        _id: new ObjectId(id)
+    }, {
+        $push: {
+            panels: base64
+        }
+    }));
+    await client.close();
 }
 
 export async function getAllCollection() {
@@ -92,4 +112,16 @@ export async function getCharacters() {
 
     await client.close();
     return documents2;
+}
+
+export async function getComic(id) {
+    if (!id)
+        return null;
+
+    await client.connect();
+    const comic = await client.db().collection("comics").findOne({
+        _id: new ObjectId(id),
+    });
+    await client.close();
+    return comic;
 }

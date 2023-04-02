@@ -11,7 +11,7 @@ export default function Home() {
         backgroundRepeat: "no-repeat"
     }}>
         <main>
-            <h1 className={styles.title}>Tell your stories in new and exciting ways using [name]</h1>
+            <h1 className={styles.title}>Tell your stories in new and exciting ways using Telecomic</h1>
             <div className={styles.buttons}>
                 <Button text={"Sign me up!"} background={"#E20074"} color={"white"} icon={<PlusCircleIcon />} link={"/collection"} />
             </div>

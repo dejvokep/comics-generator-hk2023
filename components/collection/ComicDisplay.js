@@ -2,9 +2,21 @@ import styles from "../../styles/components/collection/ComicDisplay.module.css"
 import Button from "../Button";
 import {PencilIcon, StopCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 
-export default function ComicDisplay({comic}) {
+export default function ComicDisplay({comic, onDel}) {
+    function del() {
+        const comic = comic.image === undefined;
+        fetch("/api/del", {
+            method: "POST",
+            body: {
+                id: comic.id,
+                comic
+            }
+        }).then(data => data.json());
+        onDel();
+    }
+
     return <div className={styles.container} style={{
-        "--url": `url(data:image/png;base64,${comic.image})`
+        "--url": `url(data:image/png;base64,${comic.image || comic.panels[0]})`
     }}>
         <div className={styles.blind}>
             <p className={styles.name}>{comic.name}</p>
@@ -17,8 +29,8 @@ export default function ComicDisplay({comic}) {
                 }}>{comic.name}</p>
                 <div className={styles.buttons}>
                     <div className={styles.buttonSpace}><Button text={"Edit"} icon={<PencilIcon/>}
-                                                                background={"#E20074"} color={"white"}/></div>
-                    <div><Button text={"Delete"} icon={<TrashIcon/>} background={"#E20074"} color={"white"}/></div>
+                                                                background={"#E20074"} color={"white"} link={comic.panels ? "/editor?id=" + comic.id : ""}/></div>
+                    <div><Button text={"Delete"} icon={<TrashIcon/>} background={"#E20074"} color={"white"} onClick={del}/></div>
                 </div>
             </div>
         </div>

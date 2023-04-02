@@ -1,10 +1,151 @@
-export default function Editor() {
-    const base64 = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
+import {useEffect, useRef, useState} from "react";
+import {useRouter} from "next/router";
+import Button from "../../components/Button";
+import {ArrowPathIcon, ClockIcon, PlusCircleIcon, PlusIcon} from "@heroicons/react/24/outline";
+import styles from "../../styles/pages/Editor.module.css";
+import PanelDisplay from "../../components/editor/PanelDisplay";
 
-    return <div>
-        <h1>Name</h1>
-        <div>
-            <img src={"data:image/png;base64," + base64} />
+export default function Editor() {
+    const [data, setData] = useState({});
+    const [generating, setGenerating] = useState(false);
+    const router = useRouter();
+    const ref = useRef();
+
+    function generate() {
+        if (!data.name)
+            return
+
+        setGenerating(true);
+
+        fetch("/api/narrative", {
+            method: "POST",
+            body: JSON.stringify({
+                ...data
+            })
+        }).then(narrative => {
+            const newData = {...data};
+            newData.narrative = narrative;
+            setData(newData);
+            setGenerating(false);
+        })
+    }
+
+    useEffect(() => {
+        if (!router.query.id)
+            return
+
+        fetch("/api/getcomic", {
+            method: "POST",
+            body: JSON.stringify({
+                id: router.query.id
+            })
+        }).then(data => data.json()).then(data => {
+            setData(data.data)
+            setGenerating(false);
+        })
+    }, [router.query.id])
+
+    if (!data.name) {
+        return <h1 className={styles.container}>Loading...</h1>
+    }
+
+    if (!data.narrative) {
+        return <div className={styles.container}>
+            <p>You must generate a narrative first. It is generated artificially from the inputted story and might be
+                regenerated later once a change to the story is made.</p>
+            <Button text={generating ? "Generating..." : "Generate"} icon={<PlusCircleIcon/>} background={"#E20074"}
+                    color={"white"} disabled={generating} onClick={generate}/>
         </div>
+    }
+
+    function generateImage() {
+        if (generating)
+            return
+
+        setGenerating(true)
+        const narrative = data.narrative[data.panels.length]
+
+        fetch("/api/genimage", {
+            method: "POST",
+            body: JSON.stringify({
+                id: router.query.id,
+                ...narrative
+            })
+        }).then(data => data.json()).then(b => {
+            const newData = {...data}
+            newData.panels.push(b.base64);
+            setData(newData);
+            setGenerating(false)
+        })
+    }
+
+    function regenImage(i) {
+        if (generating)
+            return
+
+        setGenerating(true)
+        const narrative = data.narrative[i]
+
+        fetch("/api/regenimage", {
+            method: "POST",
+            body: JSON.stringify({
+                id: router.query.id,
+                i,
+                ...narrative
+            })
+        }).then(data => data.json()).then(b => {
+            const newData = {...data}
+            newData.panels[i] = b.base64;
+            setData(newData);
+            setGenerating(false)
+        })
+    }
+
+    function regenerateNarrative(e) {
+        const text = ref.current.value;
+
+        setData({
+            ...data,
+            panels: [],
+            story: text
+        })
+
+        if (!data.name)
+            return
+
+        setGenerating(true);
+
+        fetch("/api/narrative", {
+            method: "POST",
+            body: JSON.stringify({
+                characters: data.characters,
+                story: text
+            })
+        }).then(narrative => {
+            const newData = {...data};
+            newData.narrative = narrative;
+            newData.panels = [];
+            newData.story = text;
+            setData(newData);
+            setGenerating(false)
+        })
+    }
+
+    return <div className={styles.container}>
+        <h1>{data.name}</h1>
+        <div className={styles.displayBox}>
+            {data.panels && (data.panels.map((panel, i) => <PanelDisplay key={i} image={panel} generating={generating}
+                                                                         onUpdate={regenImage.bind(null, i)}/>))}
+            <div className={styles.addNew} onClick={generateImage}>
+                {generating ? <ClockIcon/> : <PlusIcon/>}
+            </div>
+        </div>
+
+        <div>
+            <p>Story: {data.story}</p>
+            <textarea ref={ref} />
+        </div>
+        <Button text={"Regenerate narrative"} icon={<ArrowPathIcon/>} background={"#E20074"} color={"white"}
+                onClick={regenerateNarrative} disabled={generating}/>
     </div>
 }
