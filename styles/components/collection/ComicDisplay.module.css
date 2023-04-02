@@ -1,0 +1,72 @@
+.container {
+    position: relative;
+    width: 180px;
+    height: 280px;
+
+    margin: 20px 50px 20px 0;
+    overflow: hidden;
+}
+
+.container:before {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    content: "";
+    z-index: 0;
+
+    background: var(--url);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transition: .5s;
+}
+
+.container:hover:before {
+    transform: scale(1.2);
+}
+
+.blind {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0 3px;
+    background: rgba(0, 0, 0, .6);
+    transition: all .5s;
+}
+
+.name {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.buttons {
+    display: grid;
+    place-items: center;
+}
+
+.buttonSpace {
+    margin: 10px 0;
+}
+
+.container:hover .control {
+    opacity: 1;
+}
+
+.container:hover .blind {
+    opacity: 0;
+}
+
+.control {
+    position: absolute;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, .6);
+
+    transition: background .5s, opacity .5s;
+}

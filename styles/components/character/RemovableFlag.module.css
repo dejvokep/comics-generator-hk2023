@@ -1,0 +1,26 @@
+.container {
+    height: 20px;
+    background: white;
+    border-radius: 5px;
+    display: inline-flex;
+    padding: 0 5px;
+}
+
+.icon {
+    height: 20px;
+    width: 14px;
+    padding: 3px 0;
+    margin-right: 5px;
+}
+
+.icon svg {
+    color: #E20074;
+    vertical-align: top;
+}
+
+.text p {
+    margin: 0;
+    line-height: 20px;
+    font-size: 15px;
+    color: #E20074;
+}

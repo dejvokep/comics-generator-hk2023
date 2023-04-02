@@ -1,0 +1,31 @@
+.container {
+    padding: 120px 2em 0 2em;
+}
+
+.displayBox {
+    display: flex;
+    flex-direction: row;
+}
+
+.addNew {
+    width: 180px;
+    height: 280px;
+    display: grid;
+    place-items: center;
+    margin: 20px 0;
+}
+
+.addNew svg {
+    color: #E20074;
+    height: 40px;
+}
+
+.carousel {
+    margin-top: 20px;
+}
+
+.carousel h1 {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}

@@ -1,13 +1,19 @@
 .container {
-  padding: 0 2rem;
+  padding: 0 20%;
   display: grid;
   place-items: center;
   min-height: 100vh;
-  color: white
+  color: white;
 }
 
 .title {
-  margin: 0;
+  text-align: center;
+  margin: 20px 0;
   line-height: 1.15;
   font-size: 4rem;
+}
+
+.buttons {
+  display: grid;
+  place-items: center;
 }
