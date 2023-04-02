@@ -3,20 +3,9 @@ import styles2 from "../../styles/pages/Comic.module.css";
 import {useState} from "react";
 import Button from "../../components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
+import {getAllCollection, getCharacters} from "../../database/database";
 
-export default function Comic() {
-    const characters = [
-        {
-            id: "a",
-            name: "Alfonz Higgins",
-            image: "http://localhost:3000/background.png"
-        },
-        {
-            id: "b",
-            name: "Name",
-            image: "http://localhost:3000/favicon.png"
-        }
-    ]
+export default function Comic({ characters }) {
 
     const [data, setData] = useState({
         name: "",
@@ -88,4 +77,21 @@ export default function Comic() {
             </div>
         </div>
     </div>
+}
+
+export async function getStaticProps() {
+    const res = await getCharacters()
+
+    return {
+        props: {
+            characters: res.map(a => {
+                return {
+                    ...a,
+                    id: a._id.toHexString(),
+                    _id: null
+                }
+            }),
+        },
+        revalidate: 10,
+    }
 }

@@ -4,6 +4,7 @@ import RemovableFlag from "../../components/character/RemovableFlag";
 import Button from "../../components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {useRouter} from "next/router";
+import {getAllCollection} from "../../database/database";
 
 export default function Character() {
     const [data, setData] = useState({
@@ -149,4 +150,28 @@ export default function Character() {
             </form>
         </div>
     </div>
+}
+
+export async function getStaticProps() {
+    const res = await getAllCollection()
+
+    return {
+        props: {
+            comics: res.comics.map(a => {
+                return {
+                    ...a,
+                    id: a._id.toHexString(),
+                    _id: null
+                }
+            }),
+            characters: res.characters.map(a => {
+                return {
+                    ...a,
+                    id: a._id.toHexString(),
+                    _id: null
+                }
+            })
+        },
+        revalidate: 10,
+    }
 }

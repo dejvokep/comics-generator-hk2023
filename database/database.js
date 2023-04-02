@@ -52,7 +52,7 @@ export async function setPanel(id, order, base64) {
     return uid;
 }
 
-export async function getAll() {
+export async function getAllCollection() {
     await client.connect();
     const alldata = {};
 
@@ -73,6 +73,23 @@ export async function getAll() {
     alldata.characters = documents2;
 
     await client.close();
-    console.log(alldata);
     return alldata;
+}
+
+export async function getCharacters() {
+    await client.connect();
+
+    const data2 = client.db().collection("characters").find({}, {
+        projection: {
+            image: false
+        }
+    }).limit(10);
+    const documents2 = [];
+    while (await data2.hasNext()) {
+        documents2.push(await data2.next())
+    }
+    await data2.close();
+
+    await client.close();
+    return documents2;
 }

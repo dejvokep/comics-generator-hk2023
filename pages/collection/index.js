@@ -3,7 +3,7 @@ import styles from "../../styles/pages/Collection.module.css";
 import Button from "../../components/Button";
 import {PlusIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
-import {getAll} from "../../database/database";
+import {getAllCollection} from "../../database/database";
 
 export default function Collection({comics, characters}) {
     return <div className={styles.container}>
@@ -29,7 +29,7 @@ export default function Collection({comics, characters}) {
 }
 
 export async function getStaticProps() {
-    const res = await getAll()
+    const res = await getAllCollection()
 
     return {
         props: {
