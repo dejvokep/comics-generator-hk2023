@@ -17,6 +17,10 @@ export default function Character() {
         clothes: []
     });
 
+    function validate() {
+        return data.name && data.skin;
+    }
+
     function watchSingle(e) {
         const newData = {...data};
         newData[e.target.getAttribute("data-group")] = e.target.value.trim();
@@ -72,6 +76,7 @@ export default function Character() {
 
             <form>
                 <table className={styles.table}>
+                    <tbody>
                     <tr>
                         <td>Name:</td>
                         <td className={styles.vals}>
@@ -141,10 +146,11 @@ export default function Character() {
                             </div>}
                         </td>
                     </tr>
+                    </tbody>
                 </table>
 
                 <div className={styles.center} style={{marginTop: 20}}>
-                    <Button text={data.submitting ? "Submitting..." : "Submit"} icon={<CheckCircleIcon/>} background={"#E20074"} color={"white"} disabled={data.submitting} onClick={submit}/>
+                    <Button text={data.submitting ? "Submitting..." : "Submit"} icon={<CheckCircleIcon/>} background={"#E20074"} color={"white"} disabled={data.submitting || !validate()} onClick={submit}/>
                     <p>Press ENTER to add an attribute after typing it.</p>
                 </div>
             </form>

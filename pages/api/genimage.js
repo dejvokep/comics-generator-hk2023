@@ -3,18 +3,21 @@
 import {addPanel} from "../../database/database";
 
 export default async function handler(req, res) {
-  req.body = JSON.parse(req.body);
+    req.body = JSON.parse(req.body);
 
-  const data = await fetch(process.env.SERVER_URL + "/api/panel/generate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      ...req.body
-    })
-  }).then(data => data.text())
+    let data = await fetch(process.env.SERVER_URL + "/api/panel/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            ...req.body
+        })
+    }).then(data => data.text())
 
-  await addPanel(req.body.id, data)
-  res.status(200).json({base64: data})
+    if (data.startsWith("b'"))
+        data = data.substring(2, data.length - 1)
+
+    await addPanel(req.body.id, data)
+    res.status(200).json({base64: data})
 }

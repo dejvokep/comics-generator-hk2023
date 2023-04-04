@@ -4,12 +4,14 @@ import {PencilIcon, StopCircleIcon, TrashIcon} from "@heroicons/react/24/outline
 
 export default function ComicDisplay({comic, onDel, char}) {
     function del() {
+        console.log(comic.id);
+        console.log(!char);
         fetch("/api/del", {
             method: "POST",
-            body: {
+            body: JSON.stringify({
                 id: comic.id,
                 comic: !char
-            }
+            })
         }).then(data => data.json());
         onDel();
     }

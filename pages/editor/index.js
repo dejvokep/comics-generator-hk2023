@@ -63,7 +63,10 @@ export default function Editor() {
             return
 
         setGenerating(true)
+        console.log(data.panels)
+        console.log(data.narrative)
         const narrative = data.narrative[data.panels.length]
+        console.log(narrative)
 
         fetch("/api/genimage", {
             method: "POST",
@@ -72,6 +75,9 @@ export default function Editor() {
                 ...narrative
             })
         }).then(data => data.json()).then(b => {
+            if (b.base64.startsWith(">"))
+                return
+
             const newData = {...data}
             newData.panels.push(b.base64);
             setData(newData);
@@ -118,12 +124,13 @@ export default function Editor() {
         fetch("/api/narrative", {
             method: "POST",
             body: JSON.stringify({
+                _id: router.query.id,
                 characters: data.characters,
                 story: text
             })
-        }).then(narrative => {
+        }).then(data => data.json()).then(narrative => {
             const newData = {...data};
-            newData.narrative = narrative;
+            newData.narrative = narrative.data;
             newData.panels = [];
             newData.story = text;
             setData(newData);

@@ -38,7 +38,8 @@ export async function del(id, comic) {
 }
 export async function setNarrative(id, array, story) {
     await client.connect();
-    (await client.db().collection("comics").updateOne({
+    console.log("RESET" + id)
+    await client.db().collection("comics").updateOne({
         _id: new ObjectId(id)
     }, {
         $set: {
@@ -46,7 +47,7 @@ export async function setNarrative(id, array, story) {
             story: story,
             panels: []
         }
-    }));
+    });
     await client.close();
 }
 export async function setPanel(id, order, base64) {
@@ -76,7 +77,7 @@ export async function getAllCollection() {
     await client.connect();
     const alldata = {};
 
-    const data = client.db().collection("comics").find().limit(10);
+    const data = client.db().collection("comics").find().limit(5);
     const documents = [];
     while (await data.hasNext()) {
         documents.push(await data.next())
@@ -84,7 +85,7 @@ export async function getAllCollection() {
     await data.close();
     alldata.comics = documents;
 
-    const data2 = client.db().collection("characters").find().limit(10);
+    const data2 = client.db().collection("characters").find().limit(5);
     const documents2 = [];
     while (await data2.hasNext()) {
         documents2.push(await data2.next())
