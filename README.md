@@ -1,34 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![TeleComic](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/436/582/datas/original.png)
+## 💭 TeleComic
+> For the full version of this page including generated comic samples, please visit the project's Devpost page https://devpost.com/software/comicsensai.
 
-## Getting Started
+TeleComic is a web application inspired by the desire to provide the average person, who might not have either writing or artistic expertise, with an innovative solution to design their own comics using AI! The application was built in 24h by our team formed of 4 high school students, as part of an international hackathon [HackKosice 2023](https://hackkosice.com/hackathon/2023/). The project was awarded 3rd place in the overall category, closing the top 3 best hacks created.
 
-First, run the development server:
+The interface lets you create your own characters, which you can then use to create your own comic to add to your collection. Not creative? No worries, AI is here to help you with generating characters and your storyline - because that's essentially all you need. Afterwards it's the job of AI to create the narratives of the characters and to generate the respective comic panels (up to 12 in one comic). And, if you don't like anything, you can always get back to the versatile editor and update anything you'd like.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+As a suggestion for the future, a marketplace with all generated comics was added and we also suggested an optimal subscription system, including benefits for creators.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🏗 How we built it
+We use a wide variety of programing languages and tools. Frontend of the application was built in JavaScript with React and is served by NextJS. Our backend server is engineered in Python and uses the Flask library ([project's repository](https://github.com/TomasHutnan/ai-comics-generation_hk)). Data displayed and provided to the end user are stored in MongoDB.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+We use OpenAI models for content generation. More specifically, for text generation (stories, narratives etc.) we utilized the Davinci-003 model and all the artwork was handled by the Dall-E model.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/addcharacter.js`.
+## ⁉ Challenges and accomplishments
+At first the biggest problem was getting the correct type of images. We tested many different prompts and keywords, that heavily varied the consistency between the different comic panels. Ultimately, we ended up with a very consistent and characteristic image descriptor.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+From our initial tests, we thought that the generated images would look much worse than they do now. With rigorous testing, we managed to bring their quality to industry standard, and higher.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+We learned a lot about prompting the AI, in other words, getting it to give us what we are looking for. Other than that, we figured out how to work with APIs better and connect them to our server.
